@@ -13,15 +13,15 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
         , "com.infoworks.lab.services"
         , "com.infoworks.lab.webapp.config"
         , "com.infoworks.lab.domain"})
-public class AppServicesApplication extends SpringBootServletInitializer {
+public class CustomerServices extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
-        SpringApplication.run(AppServicesApplication.class, args);
+        SpringApplication.run(CustomerServices.class, args);
     }
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(AppServicesApplication.class);
+        return application.sources(CustomerServices.class);
     }
 
 }
