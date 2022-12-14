@@ -2,6 +2,7 @@ package com.infoworks.lab.controllers.rest;
 
 import com.infoworks.lab.domain.entities.Customer;
 import com.infoworks.lab.rest.models.ItemCount;
+import com.infoworks.lab.rest.repository.RestRepository;
 import com.infoworks.lab.services.NotifyService;
 import com.it.soul.lab.data.base.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/v1/profile")
-public class CustomerController {
+public class CustomerController implements RestRepository<Customer, Integer> {
 
     private DataSource<Integer, Customer> dataSource;
     private NotifyService notifyService;
@@ -62,10 +63,20 @@ public class CustomerController {
     }
 
     @DeleteMapping
-    public Boolean delete(@RequestParam("userid") Integer userid){
-        //TODO: Test with RestExecutor
+    public boolean delete(@RequestParam("userid") Integer userid){
+        //
         Customer deleted = dataSource.remove(userid);
         return deleted != null;
+    }
+
+    @Override
+    public String getPrimaryKeyName() {
+        return "id";
+    }
+
+    @Override
+    public Class<Customer> getEntityType() {
+        return Customer.class;
     }
 
 }
