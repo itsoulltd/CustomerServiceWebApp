@@ -38,7 +38,7 @@ public class CustomersView extends Composite<Div> {
             getContent().removeAll();
         }
         //Create DataSource:
-        GridDataSource source = createDataSource(ExecutorType.IN_MEM);
+        GridDataSource source = createDataSource(ExecutorType.REST);
 
         Configurator configurator = new Configurator(Customer.class)
                 .setDisplayType(EditorDisplayType.EMBEDDED)

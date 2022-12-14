@@ -30,8 +30,8 @@ public class CustomerRepository extends HttpTemplate<Response, Message> implemen
 
     @Override
     protected Integer port() {
-        Integer port = Integer.valueOf(System.getenv("app.customer.port"));
-        return port == null ? 8080 : port;
+        String portStr = System.getenv("app.customer.port");
+        return portStr == null ? 8080 : Integer.valueOf(portStr);
     }
 
     @Override
