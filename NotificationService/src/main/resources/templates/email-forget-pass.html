@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:remove="all">Template for HTML email</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<p>
+    Dear <span th:text="${name}">User</span>,
+</p>
+<p>
+    Please click the following link to reset your password:
+</p>
+<a th:href="${resetRef}">Reset Password</a>
+<p>
+    Regards, <br/>
+    <em>InfoWorks Dev Team</em>
+</p>
+</body>
+</html>

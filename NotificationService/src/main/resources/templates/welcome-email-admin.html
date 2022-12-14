@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:remove="all">Template for HTML email</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<p>
+    Hello, <span th:text="${name}">Admin</span>!
+</p>
+<p>
+    You have been successfully registered to <b>InfoWorks Lab</b> on
+    <span th:text="${regDate}">28-12-2012</span>
+</p>
+<p>
+    Please be informed that, your default password is: <span th:text="${defaultPass}">****</span>
+</p>
+<p>Please update your default password by clicking the following link:</p>
+<a th:href="${loginRef}">Login</a>
+<p>
+    Regards, <br/>
+    <em>InfoWorks Dev Team</em>
+</p>
+</body>
+</html>

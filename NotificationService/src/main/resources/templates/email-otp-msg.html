@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:remove="all">Template for HTML email</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<p>
+    Dear <span th:text="${name}">Valued User</span>,
+</p>
+<p>
+    Your current session OTP is:<span th:text="${otp}">****</span>
+</p>
+<p>
+    Regards, <br/>
+    <em>InfoWorks Dev Team</em>
+</p>
+</body>
+</html>

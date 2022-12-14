@@ -1,0 +1,17 @@
+version: '3.5'
+
+networks:
+  web-app-net:
+    name: my-web-app-net
+    driver: bridge
+
+services:
+  fake-smtp:
+    image: rnwood/smtp4dev
+    ports:
+      - 587:25
+      - 3000:80
+    networks:
+        - web-app-net
+
+#End of file
