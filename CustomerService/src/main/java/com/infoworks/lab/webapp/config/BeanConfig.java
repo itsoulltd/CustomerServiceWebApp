@@ -1,7 +1,7 @@
 package com.infoworks.lab.webapp.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.infoworks.lab.domain.entities.Passenger;
+import com.infoworks.lab.domain.entities.Customer;
 import com.infoworks.lab.rest.models.Message;
 import com.infoworks.lab.util.services.iResourceService;
 import com.it.soul.lab.data.simple.SimpleDataSource;
@@ -19,8 +19,8 @@ public class BeanConfig {
         return "Hi Spring Hello";
     }
 
-    @Bean("passengerDatasource")
-    public SimpleDataSource<String, Passenger> getPassengerDatasource(){
+    @Bean("customerDatasource")
+    public SimpleDataSource<String, Customer> getCustomerDatasource(){
         return new SimpleDataSource<>();
     }
 
