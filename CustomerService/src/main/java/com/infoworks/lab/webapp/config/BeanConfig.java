@@ -5,8 +5,11 @@ import com.infoworks.lab.domain.entities.Passenger;
 import com.infoworks.lab.rest.models.Message;
 import com.infoworks.lab.util.services.iResourceService;
 import com.it.soul.lab.data.simple.SimpleDataSource;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestTemplate;
 
 @Configuration
 public class BeanConfig {
@@ -29,6 +32,13 @@ public class BeanConfig {
     @Bean
     public iResourceService getResourceService(){
         return iResourceService.create();
+    }
+
+    @Bean("notifyTemplate")
+    public RestTemplate getNotifyTemplate(@Value("${app.notify.url}") String url) {
+        return new RestTemplateBuilder()
+                .rootUri(url)
+                .build();
     }
 
 }
