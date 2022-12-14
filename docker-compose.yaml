@@ -25,8 +25,8 @@ services:
    webapp-admin:
        image: vaadin-starter-app:1.0
        build:
-          context: .
-          dockerfile: Dockerfile
+          context: CustomerServiceUI
+          dockerfile: CustomerServiceUI/Dockerfile
        environment:
           app.db.name: testDB
           app.db.host: mysql-db
@@ -35,7 +35,7 @@ services:
           app.db.mysql.url.query: ?autoReconnect=true&failOverReadOnly=false&maxReconnects=10
           app.customer.host: localhost
           app.customer.port: 8080
-          app.customer.api: /api/customer
+          app.customer.api: /api/customer/v1/profile
        ports:
           - 80:8080
        restart: on-failure
