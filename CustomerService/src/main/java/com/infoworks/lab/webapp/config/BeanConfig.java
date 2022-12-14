@@ -1,10 +1,8 @@
 package com.infoworks.lab.webapp.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.infoworks.lab.domain.entities.Customer;
 import com.infoworks.lab.rest.models.Message;
 import com.infoworks.lab.util.services.iResourceService;
-import com.it.soul.lab.data.simple.SimpleDataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
@@ -17,11 +15,6 @@ public class BeanConfig {
     @Bean("HelloBean")
     public String getHello(){
         return "Hi Spring Hello";
-    }
-
-    @Bean("customerDatasource")
-    public SimpleDataSource<String, Customer> getCustomerDatasource(){
-        return new SimpleDataSource<>();
     }
 
     @Bean

@@ -7,10 +7,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Optional;
 
 @Service("customerService")
-public class CustomerService extends SimpleDataSource<String, Customer> {
+public class CustomerService extends SimpleDataSource<Integer, Customer> {
 
     private CustomerRepository repository;
 
@@ -19,9 +19,9 @@ public class CustomerService extends SimpleDataSource<String, Customer> {
     }
 
     @Override
-    public Customer read(String key) {
-        List<Customer> res = repository.findByName(key);
-        return res != null && res.size() > 0 ? res.get(0) : null;
+    public Customer read(Integer key) {
+        Optional<Customer> res = repository.findById(key);
+        return res.isPresent() ? res.get() : null;
     }
 
     @Override
@@ -36,12 +36,12 @@ public class CustomerService extends SimpleDataSource<String, Customer> {
     }
 
     @Override
-    public void put(String key, Customer customer) {
+    public void put(Integer key, Customer customer) {
         repository.save(customer);
     }
 
     @Override
-    public Customer replace(String key, Customer customer) {
+    public Customer replace(Integer key, Customer customer) {
         Customer existing = read(key);
         if (existing != null && customer != null) {
             customer.setId(existing.getId());
@@ -52,7 +52,7 @@ public class CustomerService extends SimpleDataSource<String, Customer> {
     }
 
     @Override
-    public Customer remove(String key) {
+    public Customer remove(Integer key) {
         Customer existing = read(key);
         if (existing != null) {
             repository.deleteById(existing.getId());
