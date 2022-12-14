@@ -11,7 +11,7 @@ public class DatabaseBootstrap {
     public static void createTables() {
         JsqlConfig config = new JsqlConfig();
         try (SQLExecutor executor = (SQLExecutor) config.create(ExecutorType.SQL, System.getenv("app.db.name"))){
-            String createPassenger = "CREATE TABLE IF NOT EXISTS `Passenger` (\n" +
+            String createPassenger = "CREATE TABLE IF NOT EXISTS `Customer` (\n" +
                     "  `id` int(11) NOT NULL AUTO_INCREMENT,\n" +
                     "  `active` bit(1) NOT NULL,\n" +
                     "  `age` int(11) NOT NULL,\n" +

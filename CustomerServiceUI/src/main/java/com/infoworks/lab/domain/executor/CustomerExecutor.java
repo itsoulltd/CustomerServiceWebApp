@@ -1,21 +1,21 @@
 package com.infoworks.lab.domain.executor;
 
 import com.infoworks.lab.components.rest.RestRepositoryExecutor;
-import com.infoworks.lab.domain.repository.PassengerRepository;
+import com.infoworks.lab.domain.repository.CustomerRepository;
 import com.infoworks.lab.rest.template.Interactor;
 
-public class PassengerExecutor extends RestRepositoryExecutor {
+public class CustomerExecutor extends RestRepositoryExecutor {
 
-    private PassengerRepository repository;
+    private CustomerRepository repository;
 
-    public PassengerExecutor() {
+    public CustomerExecutor() {
         super(null);
     }
 
-    public PassengerRepository getRepository() {
+    public CustomerRepository getRepository() {
         if (repository == null){
             try {
-                repository = Interactor.create(PassengerRepository.class);
+                repository = Interactor.create(CustomerRepository.class);
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             } catch (InstantiationException e) {

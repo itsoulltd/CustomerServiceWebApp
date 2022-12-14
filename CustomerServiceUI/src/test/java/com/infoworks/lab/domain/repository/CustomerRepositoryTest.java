@@ -1,7 +1,7 @@
 package com.infoworks.lab.domain.repository;
 
 import com.infoworks.lab.domain.entities.Gender;
-import com.infoworks.lab.domain.entities.Passenger;
+import com.infoworks.lab.domain.entities.Customer;
 import com.infoworks.lab.exceptions.HttpInvocationException;
 import com.infoworks.lab.rest.models.ItemCount;
 import com.infoworks.lab.rest.template.Interactor;
@@ -13,14 +13,14 @@ import org.junit.contrib.java.lang.system.EnvironmentVariables;
 
 import java.util.List;
 
-public class PassengerRepositoryTest {
+public class CustomerRepositoryTest {
 
-    private PassengerRepository repository;
+    private CustomerRepository repository;
 
-    public PassengerRepository getRepository() {
+    public CustomerRepository getRepository() {
         if (repository == null){
             try {
-                repository = Interactor.create(PassengerRepository.class);
+                repository = Interactor.create(CustomerRepository.class);
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             } catch (InstantiationException e) {
@@ -61,7 +61,7 @@ public class PassengerRepositoryTest {
         int page = 0;
         int numOfPage = (max / limit) + 1;
         while (page < numOfPage){
-            List<Passenger> riders = getRepository().fetch(page, limit);
+            List<Customer> riders = getRepository().fetch(page, limit);
             riders.forEach(rider -> System.out.println(rider.getName()));
             page++;
         }
@@ -70,13 +70,13 @@ public class PassengerRepositoryTest {
     @Test
     public void doa() throws HttpInvocationException {
         //Create & Insert:
-        Passenger created = getRepository()
-                .insert(new Passenger("Tictoc", Gender.NONE, 18));
+        Customer created = getRepository()
+                .insert(new Customer("Tictoc", Gender.NONE, 18));
         if(created != null) {
             System.out.println("Created: " + created.getName());
             //Update:
             created.setName("Tictoc-up");
-            Passenger update = getRepository().update(created, created.getId());
+            Customer update = getRepository().update(created, created.getId());
             if (update != null){
                 System.out.println("Updated: " + update.getName());
                 //Delete:

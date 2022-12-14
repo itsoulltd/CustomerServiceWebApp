@@ -2,7 +2,7 @@ package com.infoworks.lab.domain.repository;
 
 import com.infoworks.lab.client.jersey.HttpTemplate;
 import com.infoworks.lab.rest.repository.RestRepository;
-import com.infoworks.lab.domain.entities.Passenger;
+import com.infoworks.lab.domain.entities.Customer;
 import com.infoworks.lab.exceptions.HttpInvocationException;
 import com.infoworks.lab.rest.models.*;
 import com.infoworks.lab.rest.template.Invocation;
@@ -11,10 +11,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PassengerRepository extends HttpTemplate<Response, Message> implements RestRepository<Passenger, Integer> {
+public class CustomerRepository extends HttpTemplate<Response, Message> implements RestRepository<Customer, Integer> {
 
-    public PassengerRepository() {
-        super(Passenger.class, Message.class);
+    public CustomerRepository() {
+        super(Customer.class, Message.class);
     }
 
     @Override
@@ -43,8 +43,8 @@ public class PassengerRepository extends HttpTemplate<Response, Message> impleme
     }
 
     @Override
-    public Class<Passenger> getEntityType() {
-        return Passenger.class;
+    public Class<Customer> getEntityType() {
+        return Customer.class;
     }
 
     public ItemCount rowCount() {
@@ -62,11 +62,11 @@ public class PassengerRepository extends HttpTemplate<Response, Message> impleme
         return new ItemCount();
     }
 
-    public List<Passenger> fetch(Integer page, Integer limit){
+    public List<Customer> fetch(Integer page, Integer limit){
         try {
             Response items = get(null, new QueryParam("page", page.toString()), new QueryParam("limit", limit.toString()));
             if (items instanceof ResponseList){
-                List<Passenger> collection = ((ResponseList)items).getCollections();
+                List<Customer> collection = ((ResponseList)items).getCollections();
                 return collection;
             }
         } catch (HttpInvocationException e) {
@@ -75,9 +75,9 @@ public class PassengerRepository extends HttpTemplate<Response, Message> impleme
         return new ArrayList<>();
     }
 
-    public Passenger insert(Passenger passenger){
+    public Customer insert(Customer customer){
         try {
-            Passenger response = (Passenger) post(passenger);
+            Customer response = (Customer) post(customer);
             return response;
         } catch (HttpInvocationException e) {
             e.printStackTrace();
@@ -85,10 +85,10 @@ public class PassengerRepository extends HttpTemplate<Response, Message> impleme
         return null;
     }
 
-    public Passenger update(Passenger passenger, Integer userid){
+    public Customer update(Customer customer, Integer userid){
         try {
-            passenger.setId(userid);
-            Passenger response = (Passenger) put(passenger);
+            customer.setId(userid);
+            Customer response = (Customer) put(customer);
             return response;
         } catch (HttpInvocationException e) {
             e.printStackTrace();

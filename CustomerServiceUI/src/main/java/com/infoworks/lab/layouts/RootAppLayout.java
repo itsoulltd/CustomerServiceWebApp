@@ -1,7 +1,7 @@
 package com.infoworks.lab.layouts;
 
 import com.infoworks.lab.components.component.VImage;
-import com.infoworks.lab.components.ui.PassengersView;
+import com.infoworks.lab.components.ui.CustomersView;
 import com.infoworks.lab.components.ui.ProfileView;
 import com.infoworks.lab.components.ui.TrendsView;
 import com.infoworks.lab.domain.repository.AuthRepository;
@@ -78,7 +78,7 @@ public class RootAppLayout extends AppLayout {
 
     private Tab passengers() {
         final Tab  tab   = new Tab("Passengers");
-        tab2Workspace.put(tab, new PassengersView());
+        tab2Workspace.put(tab, new CustomersView());
         return tab;
     }
 
