@@ -3,16 +3,25 @@ package com.infoworks.lab.domain.entities;
 import com.infoworks.lab.rest.models.Response;
 import com.it.soul.lab.sql.SQLExecutor;
 import com.it.soul.lab.sql.entity.Ignore;
+import com.it.soul.lab.sql.entity.PrimaryKey;
+import com.it.soul.lab.sql.entity.TableName;
 import com.it.soul.lab.sql.query.models.Property;
 
+import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 
+@Entity(name = "Customer")
+@TableName(value = "Customer")
 public class Customer extends Response {
 
+	@PrimaryKey(name="id", auto=true)
+	@Id
+	@Column(length = 100)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id = 0;
 	private String name;
 	private String sex = Gender.NONE.name();
