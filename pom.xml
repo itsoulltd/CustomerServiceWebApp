@@ -12,6 +12,7 @@
     <modules>
         <module>NotificationService</module>
         <module>CustomerService</module>
+        <module>CustomerServiceUI</module>
     </modules>
 
     <properties>
