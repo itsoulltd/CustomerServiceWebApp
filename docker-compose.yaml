@@ -3,33 +3,17 @@ version: '3.5'
 networks:
    web-app-net:
        name: my-web-app-net
-       #driver: overlay
        driver: bridge
 
-volumes:
-   mysql-db-storage:
-
 services:
-   mysql-db:
-      image: mysql:8.0.13
-      environment:
-          MYSQL_DATABASE: testDB
-          MYSQL_ROOT_PASSWORD: root@123
-      ports:
-          - 3306:3306
-      networks:
-          - web-app-net
-      volumes:
-          - mysql-db-storage:/var/lib/mysql
-
-   webapp-admin:
-       image: vaadin-starter-app:1.0
+   customer-service-ui:
+       image: customer-service-ui:1.0
        build:
-          context: CustomerServiceUI
-          dockerfile: CustomerServiceUI/Dockerfile
+          context: ./CustomerServiceUI
+          dockerfile: Dockerfile
        environment:
-          app.db.name: testDB
-          app.db.host: mysql-db
+          app.db.name: customerDB
+          app.db.host: customer-db
           app.db.port: 3306
           app.db.password: root@123
           app.db.mysql.url.query: ?autoReconnect=true&failOverReadOnly=false&maxReconnects=10
