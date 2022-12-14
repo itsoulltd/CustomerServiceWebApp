@@ -35,7 +35,7 @@ public class CustomerControllerIntegrationTest {
         //
         controller.insert(new Customer("Sayed The Coder", Gender.MALE, 24));
         //
-        ItemCount count = controller.getRowCount();
+        ItemCount count = controller.rowCount();
         System.out.println(count.getCount());
     }
 
@@ -46,8 +46,8 @@ public class CustomerControllerIntegrationTest {
         controller.insert(new Customer("Evan The Pankha Coder", Gender.MALE, 24));
         controller.insert(new Customer("Razib The Pagla", Gender.MALE, 26));
         //
-        int size = Long.valueOf(controller.getRowCount().getCount()).intValue();
-        List<Customer> items = controller.query(size, 0);
+        int size = Long.valueOf(controller.rowCount().getCount()).intValue();
+        List<Customer> items = controller.fetch(size, 0);
         items.stream().forEach(customer -> System.out.println(customer.getName()));
     }
 
