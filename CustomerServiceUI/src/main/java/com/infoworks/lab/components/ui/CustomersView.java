@@ -6,11 +6,10 @@ import com.infoworks.lab.components.crud.components.datasource.DefaultDataSource
 import com.infoworks.lab.components.crud.components.datasource.GridDataSource;
 import com.infoworks.lab.components.crud.components.utils.EditorDisplayType;
 import com.infoworks.lab.components.db.source.JsqlDataSource;
-import com.infoworks.lab.components.db.source.SqlDataSource;
 import com.infoworks.lab.components.presenters.CustomerEditor;
 import com.infoworks.lab.components.rest.source.RestDataSource;
-import com.infoworks.lab.domain.entities.Gender;
 import com.infoworks.lab.domain.entities.Customer;
+import com.infoworks.lab.domain.entities.Gender;
 import com.infoworks.lab.domain.executor.CustomerExecutor;
 import com.infoworks.lab.jsql.ExecutorType;
 import com.infoworks.lab.layouts.RootAppLayout;
@@ -23,7 +22,7 @@ import com.vaadin.flow.router.Route;
 import java.util.ArrayList;
 import java.util.List;
 
-@Route(value = RoutePath.PASSENGERS_CRUD_VIEW, layout = RootAppLayout.class)
+@Route(value = RoutePath.CUSTOMERS_CRUD_VIEW, layout = RootAppLayout.class)
 public class CustomersView extends Composite<Div> {
 
     public CustomersView() {
@@ -39,7 +38,7 @@ public class CustomersView extends Composite<Div> {
             getContent().removeAll();
         }
         //Create DataSource:
-        GridDataSource source = createDataSource(ExecutorType.JPQL);
+        GridDataSource source = createDataSource(ExecutorType.IN_MEM);
 
         Configurator configurator = new Configurator(Customer.class)
                 .setDisplayType(EditorDisplayType.EMBEDDED)
@@ -53,12 +52,7 @@ public class CustomersView extends Composite<Div> {
     }
 
     private GridDataSource createDataSource(ExecutorType executorType){
-        if (executorType == ExecutorType.SQL){
-            //Fetching Data From Database:
-            //DatabaseBootstrap.createTables();
-            GridDataSource source = JsqlDataSource.createDataSource(SqlDataSource.class, executorType);
-            return source;
-        }else if(executorType == ExecutorType.REST) {
+        if(executorType == ExecutorType.REST) {
             //Fetching Data From WebService:
             JsqlDataSource source = JsqlDataSource.createDataSource(RestDataSource.class, executorType);
             source.setExecutor(new CustomerExecutor());
@@ -66,12 +60,12 @@ public class CustomersView extends Composite<Div> {
         }else{
             //In-Memory DataSource:
             GridDataSource source = new DefaultDataSource();
-            getPassengers().stream().forEach(customer -> source.save(customer));
+            getCustomers().stream().forEach(customer -> source.save(customer));
             return source;
         }
     }
 
-    private List<Customer> getPassengers() {
+    private List<Customer> getCustomers() {
         List<Customer> personList = new ArrayList<>();
         personList.add(new Customer("Lucas", Gender.MALE, 68));
         personList.add(new Customer("Peter", Gender.MALE, 38));

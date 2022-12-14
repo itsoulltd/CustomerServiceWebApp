@@ -33,9 +33,9 @@ services:
           app.db.port: 3306
           app.db.password: root@123
           app.db.mysql.url.query: ?autoReconnect=true&failOverReadOnly=false&maxReconnects=10
-          app.passenger.host: localhost
-          app.passenger.port: 8080
-          app.passenger.api: passenger
+          app.customer.host: localhost
+          app.customer.port: 8080
+          app.customer.api: /api/customer
        ports:
           - 80:8080
        restart: on-failure

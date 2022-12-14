@@ -40,7 +40,7 @@ public class RootAppLayout extends AppLayout {
         logo.setHeight("44px");
         addToNavbar(new DrawerToggle(), logo);
 
-        final Tabs tabs = new Tabs(profile(), passengers(), trends(), logout());
+        final Tabs tabs = new Tabs(profile(), customers(), trends(), logout());
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
         tabs.addSelectedChangeListener(event -> {
             final Tab selectedTab = event.getSelectedTab();
@@ -76,8 +76,8 @@ public class RootAppLayout extends AppLayout {
         return tab;
     }
 
-    private Tab passengers() {
-        final Tab  tab   = new Tab("Passengers");
+    private Tab customers() {
+        final Tab  tab   = new Tab("Customers");
         tab2Workspace.put(tab, new CustomersView());
         return tab;
     }

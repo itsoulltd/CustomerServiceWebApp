@@ -24,17 +24,17 @@ public class CustomerRepository extends HttpTemplate<Response, Message> implemen
 
     @Override
     protected String host() {
-        return System.getenv("app.passenger.host");
+        return System.getenv("app.customer.host");
     }
 
     @Override
     protected Integer port() {
-        return Integer.valueOf(System.getenv("app.passenger.port"));
+        return Integer.valueOf(System.getenv("app.customer.port"));
     }
 
     @Override
     protected String api() {
-        return System.getenv("app.passenger.api");
+        return System.getenv("app.customer.api");
     }
 
     @Override

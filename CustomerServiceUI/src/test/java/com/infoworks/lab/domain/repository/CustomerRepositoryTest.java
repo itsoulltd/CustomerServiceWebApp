@@ -35,16 +35,16 @@ public class CustomerRepositoryTest {
 
     @Before
     public void before() {
-        env.set("app.passenger.host", "localhost");
-        env.set("app.passenger.port", "8080");
-        env.set("app.passenger.api", "passenger");
+        env.set("app.customer.host", "localhost");
+        env.set("app.customer.port", "8080");
+        env.set("app.customer.api", "/api/customer");
     }
 
     @Test
     public void envTest(){
-        Assert.assertTrue(System.getenv("app.passenger.host").equalsIgnoreCase("localhost"));
-        Assert.assertTrue(System.getenv("app.passenger.port").equalsIgnoreCase("8080"));
-        Assert.assertTrue(System.getenv("app.passenger.api").equalsIgnoreCase("passenger"));
+        Assert.assertTrue(System.getenv("app.customer.host").equalsIgnoreCase("localhost"));
+        Assert.assertTrue(System.getenv("app.customer.port").equalsIgnoreCase("8080"));
+        Assert.assertTrue(System.getenv("app.customer.api").equalsIgnoreCase("customer"));
     }
 
     @Test
