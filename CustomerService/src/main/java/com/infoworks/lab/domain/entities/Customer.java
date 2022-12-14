@@ -1,6 +1,7 @@
 package com.infoworks.lab.domain.entities;
 
 import com.infoworks.lab.domain.validation.constraint.Gender.IsValidGender;
+import com.infoworks.lab.rest.validation.Email.EmailPattern;
 import com.it.soul.lab.sql.SQLExecutor;
 import com.it.soul.lab.sql.entity.Ignore;
 import com.it.soul.lab.sql.entity.PrimaryKey;
@@ -39,6 +40,10 @@ public class Customer extends com.it.soul.lab.sql.entity.Entity {
     private Date dob = new java.sql.Date(new Date().getTime());
 
 	private boolean active;
+
+	@EmailPattern(message = "Please pass valid email address, thanks you.")
+	@NotNull(message = "email must not be null.")
+	private String email;
 
 	@Ignore
 	private static int _autoIncrement = -1;
@@ -108,7 +113,15 @@ public class Customer extends com.it.soul.lab.sql.entity.Entity {
         this.sex = sex;
     }
 
-    @Override
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
@@ -123,7 +136,6 @@ public class Customer extends com.it.soul.lab.sql.entity.Entity {
 
 	public Property getPropertyTest(String key, SQLExecutor exe, boolean skipPrimary) {
 		return getProperty(key, exe, skipPrimary);
-
 	}
 
 }

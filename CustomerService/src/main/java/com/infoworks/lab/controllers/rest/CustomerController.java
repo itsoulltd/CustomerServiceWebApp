@@ -5,6 +5,7 @@ import com.infoworks.lab.rest.models.ItemCount;
 import com.infoworks.lab.rest.repository.RestRepository;
 import com.infoworks.lab.services.NotifyService;
 import com.it.soul.lab.data.base.DataSource;
+import com.it.soul.lab.sql.query.models.Property;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
@@ -50,6 +51,13 @@ public class CustomerController implements RestRepository<Customer, Integer> {
     public Customer insert(@Valid @RequestBody Customer customer){
         //
         dataSource.put(customer.getId(), customer);
+        //Send an async email to whom create user:
+        notifyService.sendEmail("noreply@customer.com"
+                , customer.getEmail()
+                , "Customer Created!"
+                , "welcome-email-sample.html"
+                , new Property("name", customer.getName())
+                , new Property("technologies", new String[]{"Vaadin", "Spring-5", "Spring-Boot"}));
         return customer;
     }
 
