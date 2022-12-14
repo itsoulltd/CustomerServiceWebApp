@@ -17,8 +17,9 @@ public class Customer extends Response {
 	private String name;
 	private String sex = Gender.NONE.name();
 	private int age = 18;
-	private Date dob = new java.sql.Date(new Date().getTime());
+	private Date dob = new Date();
 	private boolean active;
+	private String email;
 
 	@Ignore
 	private static int _autoIncrement = -1;
@@ -86,6 +87,14 @@ public class Customer extends Response {
 
 	public void setSex(String sex) {
 		this.sex = sex;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	@Override
