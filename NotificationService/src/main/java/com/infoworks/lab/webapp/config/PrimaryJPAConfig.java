@@ -25,6 +25,7 @@ import javax.sql.DataSource;
         basePackages = {"com.infoworks.lab.domain.repositories"}
 )
 @PropertySource("classpath:application-mysql.properties")
+@PropertySource("classpath:application-h2db.properties")
 public class PrimaryJPAConfig {
 
     private Environment env;
