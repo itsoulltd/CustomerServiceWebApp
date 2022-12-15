@@ -1,6 +1,7 @@
 package com.infoworks.lab.components.presenters;
 
 import com.infoworks.lab.components.crud.components.editor.EmbeddedBeanEditor;
+import com.infoworks.lab.domain.entities.Customer;
 import com.infoworks.lab.domain.entities.Gender;
 import com.it.soul.lab.sql.query.models.Property;
 import com.vaadin.flow.component.HasValue;
@@ -11,8 +12,11 @@ import com.vaadin.flow.data.binder.ValueContext;
 import com.vaadin.flow.data.converter.Converter;
 
 import java.util.Arrays;
+import java.util.logging.Logger;
 
 public class CustomerEditor extends EmbeddedBeanEditor {
+
+    private static Logger LOG = Logger.getLogger(Customer.class.getSimpleName());
 
     public CustomerEditor(Class beanType) {
         super(beanType);
