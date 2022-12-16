@@ -13,15 +13,15 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
         , "com.infoworks.lab.services"
         , "com.infoworks.lab.webapp.config"
         , "com.infoworks.lab.domain"})
-public class ChatBoxApp extends SpringBootServletInitializer {
+public class WebSessionServer extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
-        SpringApplication.run(ChatBoxApp.class, args);
+        SpringApplication.run(WebSessionServer.class, args);
     }
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(ChatBoxApp.class);
+        return application.sources(WebSessionServer.class);
     }
 
 }
