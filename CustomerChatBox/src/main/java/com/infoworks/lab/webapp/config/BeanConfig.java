@@ -1,8 +1,6 @@
 package com.infoworks.lab.webapp.config;
 
-import com.infoworks.lab.domain.entities.Passenger;
 import com.infoworks.lab.util.services.iResourceService;
-import com.it.soul.lab.data.simple.SimpleDataSource;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.RedisURI;
 import io.lettuce.core.api.StatefulRedisConnection;
@@ -25,11 +23,6 @@ public class BeanConfig {
     @Bean("HelloBean")
     public String getHello(){
         return "Hi Spring Hello";
-    }
-
-    @Bean("passengerDatasource")
-    public SimpleDataSource<String, Passenger> getPassengerDatasource(){
-        return new SimpleDataSource<>();
     }
 
     @Bean
