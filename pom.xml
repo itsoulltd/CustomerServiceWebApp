@@ -13,6 +13,7 @@
         <module>NotificationService</module>
         <module>CustomerService</module>
         <module>CustomerServiceUI</module>
+        <module>CustomerChatBox</module>
     </modules>
 
     <properties>
