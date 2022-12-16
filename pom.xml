@@ -14,6 +14,7 @@
         <module>CustomerService</module>
         <module>CustomerServiceUI</module>
         <module>CustomerChatBox</module>
+        <module>WebSessionServer</module>
     </modules>
 
     <properties>
