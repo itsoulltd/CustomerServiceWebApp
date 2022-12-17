@@ -45,7 +45,7 @@ public class ReportExcelWriter {
         write(rows, outputFileName);
     }
 
-    @Async
+    @Async("SequentialExecutor")
     public void writeAndEmail(Customer[] customers, String outputFileName, String email) {
         Map<Integer, List<String>> rows = new HashMap<>();
         AtomicInteger counter = new AtomicInteger(0);
@@ -58,6 +58,7 @@ public class ReportExcelWriter {
             rows.put(counter.getAndIncrement(), values);
         });
         if (rows.size() > 0){
+            outputFileName = System.currentTimeMillis() + "_" + outputFileName;
             write(rows, outputFileName);
             //Send Email with Download Link:
             notifyService.sendEmail("noreply@customer.com"
