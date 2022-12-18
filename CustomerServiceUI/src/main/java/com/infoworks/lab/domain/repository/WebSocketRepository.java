@@ -54,6 +54,17 @@ public class WebSocketRepository {
         socket.setQueryParam("username", getUsername());
         socket.setQueryParam("password", getPassword());
         if (enableHeartBeat) socket.enableHeartbeat(new long[]{10000L, 10000L});
+        //Handle-Connection Error:
+        socket.connectionErrorHandler((throwable) -> {
+            LOG.info("WebSocket Connection Failed!");
+            LOG.log(Level.WARNING, throwable.getMessage(), throwable);
+        });
+        //Handle-Connection Success:
+        socket.connectionAcceptedHandler((var1, var2) -> {
+            //Take other-measures:
+            LOG.info("WebSocket Connection Successful!");
+        });
+        //Connect...
         socket.connect(String.format("%s%s:%s", getSchema(), getHostName(), getHostPort()));
     }
 
