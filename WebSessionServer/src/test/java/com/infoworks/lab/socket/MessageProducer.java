@@ -43,7 +43,7 @@ public class MessageProducer extends com.infoworks.lab.simulator.Runtime {
 
     private void emitLocations(long waitRatio, SocketTemplate socket, Consumer<String> onCompletion) {
         CountDownLatch latch = new CountDownLatch(1);
-        Flux<Integer> flux = Flux.just(1, 2, 3, 4, 5, 6);
+        Flux<Integer> flux = Flux.just(1);
         //
         long emitInterval = waitRatio * (new Random().nextInt(9) + 1);
         flux.delayElements(Duration.ofMillis(emitInterval))

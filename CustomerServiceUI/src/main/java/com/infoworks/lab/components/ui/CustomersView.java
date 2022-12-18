@@ -28,7 +28,6 @@ import com.vaadin.flow.router.Route;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Route(value = RoutePath.CUSTOMERS_CRUD_VIEW, layout = RootAppLayout.class)
@@ -72,18 +71,25 @@ public class CustomersView extends Composite<Div> {
     private void unsubscribeToSocket() {
         Object obj = UI.getCurrent().getSession().getAttribute("web_socket");
         if (Objects.isNull(obj)) return;
-        ((WebSocketRepository) obj).getSocket().unsubscribe("/user/queue/async/event");
+        ((WebSocketRepository) obj).getSocket().unsubscribe("/topic/event");
+        LOG.info("unsubscribeToSocket");
     }
 
     private void subscribeToSocket() {
         Object obj = UI.getCurrent().getSession().getAttribute("web_socket");
         if (Objects.isNull(obj)) return;
-        ((WebSocketRepository) obj).getSocket().subscribe("/user/queue/async/event", Message.class, (msg) -> {
+        ((WebSocketRepository) obj).getSocket().subscribe("/topic/event", Message.class, (msg) -> {
             if (msg != null){
-                Notification notification = Notification.show(msg.getPayload());
-                notification.addThemeVariants(NotificationVariant.LUMO_PRIMARY);
+                //Update In UI-Thread:
+                if (getUI().isPresent()) {
+                    getUI().get().access(() -> {
+                        Notification notification = Notification.show(msg.getPayload());
+                        notification.addThemeVariants(NotificationVariant.LUMO_PRIMARY);
+                    });
+                }
             }
         });
+        LOG.info("subscribeToSocket");
     }
 
     private GridDataSource createDataSource(ExecutorType executorType){

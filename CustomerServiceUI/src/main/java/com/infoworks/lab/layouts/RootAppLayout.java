@@ -5,6 +5,7 @@ import com.infoworks.lab.components.ui.CustomersView;
 import com.infoworks.lab.components.ui.ProfileView;
 import com.infoworks.lab.components.ui.TrendsView;
 import com.infoworks.lab.domain.repository.AuthRepository;
+import com.infoworks.lab.domain.repository.WebSocketRepository;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -23,6 +24,7 @@ import com.vaadin.flow.theme.lumo.Lumo;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @Push
 @Theme(Lumo.class)
@@ -59,6 +61,9 @@ public class RootAppLayout extends AppLayout {
             String authToken = UI.getCurrent().getSession().getAttribute("X-AUTH-TOKEN").toString();
             authRepo.doLogout(authToken, (isSuccess, msg) -> {
                 if (isSuccess) {
+                    Object obj = UI.getCurrent().getSession().getAttribute("web_socket");
+                    if (Objects.isNull(obj)) return;
+                    ((WebSocketRepository)obj).disconnect();
                     UI.getCurrent().getSession().setAttribute("X-AUTH-TOKEN", null);
                     UI.getCurrent().navigate("");
                 }
