@@ -8,7 +8,7 @@ public class ChatBoxRepository extends WebSocketRepository{
     private static Logger LOG = Logger.getLogger(WebSocketRepository.class.getSimpleName());
 
     @Override
-    public void init() throws ExecutionException, InterruptedException {
-        super.init();
+    public void init(String appName) throws ExecutionException, InterruptedException {
+        super.init(appName);
     }
 }

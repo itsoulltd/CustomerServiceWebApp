@@ -40,9 +40,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //.requiresChannel().anyRequest().requiresSecure() //enable for Https
                 //.and()
                 //.authorizeRequests().anyRequest().authenticated() //enable to restrict all
-                .authorizeRequests().antMatchers("/**").permitAll() //enable to open all
-                .and()
-                .addFilterBefore(new AuthorizationFilter(), BasicAuthenticationFilter.class);
+                .authorizeRequests().antMatchers("/**").permitAll(); //enable to open all
+                //.and()
+                //.addFilterBefore(new AuthorizationFilter(), BasicAuthenticationFilter.class);
     }
 
     @Override
