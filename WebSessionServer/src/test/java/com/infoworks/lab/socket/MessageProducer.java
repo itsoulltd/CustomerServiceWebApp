@@ -24,7 +24,7 @@ public class MessageProducer extends com.infoworks.lab.simulator.Runtime {
             socket.setAuthorizationHeader("TOKEN");
             socket.setQueryParam("user_name", "user_name");
             socket.setQueryParam("secret", "app_secret");
-            socket.connect("ws://localhost:8080/process");
+            socket.connect("ws://localhost:8081/process");
             //
             String question = "Wanna Start? -> ";
             while (boolScanner(question)) {
