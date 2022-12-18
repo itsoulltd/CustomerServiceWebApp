@@ -44,7 +44,7 @@ public class WebSocketRepository {
         return schema.isPresent() ? schema.get().toString() : "ws://";
     }
 
-    protected SocketTemplate getSocket() {
+    public SocketTemplate getSocket() {
         return socket;
     }
 
