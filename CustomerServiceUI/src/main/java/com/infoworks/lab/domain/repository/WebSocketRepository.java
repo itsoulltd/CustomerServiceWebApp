@@ -33,7 +33,7 @@ public class WebSocketRepository {
         return socket;
     }
 
-    public void init(boolean enableHeartBeat, String token, Property username, Property password) throws ExecutionException, InterruptedException {
+    public void init(String appName, boolean enableHeartBeat, String token, Property username, Property password) throws ExecutionException, InterruptedException {
         socket = new SocketTemplate(SocketType.Standard);
         if (enableHeartBeat)
             socket.enableHeartbeat(new long[]{10000L, 10000L});
@@ -54,19 +54,21 @@ public class WebSocketRepository {
             LOG.info("WebSocket Connection Successful!");
         });
         //Connect...
-        socket.connect(String.format("%s%s:%s", getSchema(), getHostName(), getHostPort()));
+        if (Objects.isNull(appName) || appName.isEmpty()) throw new RuntimeException("appName must not be null or empty.");
+        if (!appName.startsWith("/")) appName = "/" + appName;
+        socket.connect(String.format("%s%s:%s%s", getSchema(), getHostName(), getHostPort(), appName));
     }
 
-    public void init() throws ExecutionException, InterruptedException {
-        init(false, null, null, null);
+    public void init(String appName) throws ExecutionException, InterruptedException {
+        init(appName, false, null, null, null);
     }
 
-    public void init(boolean enableHeartBeat) throws ExecutionException, InterruptedException {
-        init(enableHeartBeat, null, null, null);
+    public void init(String appName, boolean enableHeartBeat) throws ExecutionException, InterruptedException {
+        init(appName, enableHeartBeat, null, null, null);
     }
 
-    public void init(boolean enableHeartBeat, String token) throws ExecutionException, InterruptedException {
-        init(enableHeartBeat, token, null, null);
+    public void init(String appName, boolean enableHeartBeat, String token) throws ExecutionException, InterruptedException {
+        init(appName, enableHeartBeat, token, null, null);
     }
 
     public void disconnect() {
