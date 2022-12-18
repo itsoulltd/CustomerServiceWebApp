@@ -3,6 +3,7 @@ package com.infoworks.lab.domain.repository;
 import com.infoworks.lab.client.spring.SocketTemplate;
 import com.infoworks.lab.client.spring.SocketType;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
@@ -16,44 +17,27 @@ public class WebSocketRepository {
     protected Optional<Object> schema = getEnvProperty("schema", String.class);
     protected Optional<Object> hostName = getEnvProperty("hostName", String.class);
     protected Optional<Object> hostPort = getEnvProperty("port", Integer.class);
-    protected Optional<Object> accessToken = getEnvProperty("accessToken", String.class);
-    protected Optional<Object> username = getEnvProperty("username", String.class);
-    protected Optional<Object> password = getEnvProperty("password", String.class);
-
-    public String getAccessToken() {
-        return accessToken.isPresent() ? accessToken.get().toString() : "X-AUTH-TOKEN";
-    }
-
-    public String getHostName() {
-        return hostName.isPresent() ? hostName.get().toString() : "localhost";
-    }
-
-    public String getHostPort() {
-        return (hostPort.isPresent()? hostPort.get().toString() : "8080");
-    }
-
-    public String getUsername() {
-        return username.isPresent() ? username.get().toString() : "user";
-    }
-
-    public String getPassword() {
-        return password.isPresent() ? password.get().toString() : "";
-    }
 
     public String getSchema() {
         return schema.isPresent() ? schema.get().toString() : "ws://";
+    }
+    public String getHostName() {
+        return hostName.isPresent() ? hostName.get().toString() : "localhost";
+    }
+    public String getHostPort() {
+        return (hostPort.isPresent()? hostPort.get().toString() : "8080");
     }
 
     public SocketTemplate getSocket() {
         return socket;
     }
 
-    public void init(boolean enableHeartBeat) throws ExecutionException, InterruptedException {
+    public void init(boolean enableHeartBeat, String token, String username, String password) throws ExecutionException, InterruptedException {
         socket = new SocketTemplate(SocketType.Standard);
-        socket.setAuthorizationHeader(getAccessToken());
-        socket.setQueryParam("username", getUsername());
-        socket.setQueryParam("password", getPassword());
         if (enableHeartBeat) socket.enableHeartbeat(new long[]{10000L, 10000L});
+        if (Objects.nonNull(token)) socket.setAuthorizationHeader(token);
+        if (Objects.nonNull(username)) socket.setQueryParam("username", username);
+        if (Objects.nonNull(password)) socket.setQueryParam("password", password);
         //Handle-Connection Error:
         socket.connectionErrorHandler((throwable) -> {
             LOG.info("WebSocket Connection Failed!");
@@ -69,7 +53,15 @@ public class WebSocketRepository {
     }
 
     public void init() throws ExecutionException, InterruptedException {
-        init(false);
+        init(false, null, null, null);
+    }
+
+    public void init(boolean enableHeartBeat) throws ExecutionException, InterruptedException {
+        init(enableHeartBeat, null, null, null);
+    }
+
+    public void init(boolean enableHeartBeat, String token) throws ExecutionException, InterruptedException {
+        init(enableHeartBeat, token, null, null);
     }
 
     public void disconnect() {
