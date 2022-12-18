@@ -2,6 +2,7 @@ package com.infoworks.lab.domain.repository;
 
 import com.infoworks.lab.client.spring.SocketTemplate;
 import com.infoworks.lab.client.spring.SocketType;
+import com.it.soul.lab.sql.query.models.Property;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -32,12 +33,16 @@ public class WebSocketRepository {
         return socket;
     }
 
-    public void init(boolean enableHeartBeat, String token, String username, String password) throws ExecutionException, InterruptedException {
+    public void init(boolean enableHeartBeat, String token, Property username, Property password) throws ExecutionException, InterruptedException {
         socket = new SocketTemplate(SocketType.Standard);
-        if (enableHeartBeat) socket.enableHeartbeat(new long[]{10000L, 10000L});
-        if (Objects.nonNull(token)) socket.setAuthorizationHeader(token);
-        if (Objects.nonNull(username)) socket.setQueryParam("username", username);
-        if (Objects.nonNull(password)) socket.setQueryParam("password", password);
+        if (enableHeartBeat)
+            socket.enableHeartbeat(new long[]{10000L, 10000L});
+        if (Objects.nonNull(token))
+            socket.setAuthorizationHeader(token);
+        if (Objects.nonNull(username) && Objects.nonNull(username.getValue()))
+            socket.setQueryParam(username.getKey(), username.getValue().toString());
+        if (Objects.nonNull(password) && Objects.nonNull(password.getValue()))
+            socket.setQueryParam(password.getKey(), password.getValue().toString());
         //Handle-Connection Error:
         socket.connectionErrorHandler((throwable) -> {
             LOG.info("WebSocket Connection Failed!");
