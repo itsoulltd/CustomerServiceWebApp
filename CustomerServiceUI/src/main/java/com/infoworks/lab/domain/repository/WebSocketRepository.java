@@ -16,7 +16,7 @@ public class WebSocketRepository {
 
     private SocketTemplate socket;
     protected Optional<Object> schema = getEnvProperty("schema", String.class);
-    protected Optional<Object> hostName = getEnvProperty("hostName", String.class);
+    protected Optional<Object> hostName = getEnvProperty("host", String.class);
     protected Optional<Object> hostPort = getEnvProperty("port", Integer.class);
 
     public String getSchema() {
