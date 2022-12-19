@@ -66,7 +66,7 @@ public class ReportExcelWriter {
         //Testing...make a long pause:
         try {
             final int randVal = new Random().nextInt(9) + 1;
-            long emitInterval = 300 * randVal;
+            long emitInterval = 500 * randVal;
             Thread.sleep(Duration.ofMillis(emitInterval).toMillis());
         } catch (InterruptedException e) {
             LOG.error(e.getMessage(), e);
