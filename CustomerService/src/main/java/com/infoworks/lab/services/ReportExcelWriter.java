@@ -10,9 +10,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -63,7 +65,9 @@ public class ReportExcelWriter {
         });
         //Testing...make a long pause:
         try {
-            Thread.sleep(50000);
+            final int randVal = new Random().nextInt(9) + 1;
+            long emitInterval = 300 * randVal;
+            Thread.sleep(Duration.ofMillis(emitInterval).toMillis());
         } catch (InterruptedException e) {
             LOG.error(e.getMessage(), e);
         }
