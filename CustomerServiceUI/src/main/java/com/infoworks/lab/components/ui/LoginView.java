@@ -61,8 +61,7 @@ public class LoginView extends VerticalLayout {
         //On-ForgetPassword-Click:
         this.login.addForgotPasswordListener(event -> {
             //TODO: Implement A ForgotPassView
-            Notification notification = Notification.show("Forgot Password Clicked!");
-            notification.addThemeVariants(NotificationVariant.LUMO_PRIMARY);
+            Notification.show("Forgot Password Clicked!");
         });
     }
 

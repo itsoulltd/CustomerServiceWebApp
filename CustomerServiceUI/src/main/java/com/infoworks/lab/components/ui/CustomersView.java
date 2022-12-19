@@ -83,8 +83,7 @@ public class CustomersView extends Composite<Div> {
                 //Update In UI-Thread:
                 if (getUI().isPresent()) {
                     getUI().get().access(() -> {
-                        Notification notification = Notification.show(msg.getPayload());
-                        notification.addThemeVariants(NotificationVariant.LUMO_PRIMARY);
+                        Notification.show(msg.getPayload());
                     });
                 }
             }
