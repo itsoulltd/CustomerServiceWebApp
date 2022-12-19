@@ -11,23 +11,17 @@ import com.infoworks.lab.components.rest.source.RestDataSource;
 import com.infoworks.lab.domain.entities.Customer;
 import com.infoworks.lab.domain.entities.Gender;
 import com.infoworks.lab.domain.executor.CustomerExecutor;
-import com.infoworks.lab.domain.repository.WebSocketRepository;
 import com.infoworks.lab.jsql.ExecutorType;
 import com.infoworks.lab.layouts.RootAppLayout;
 import com.infoworks.lab.layouts.RoutePath;
-import com.infoworks.lab.rest.models.Message;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.DetachEvent;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.router.Route;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.logging.Logger;
 
 @Route(value = RoutePath.CUSTOMERS_CRUD_VIEW, layout = RootAppLayout.class)
@@ -42,7 +36,7 @@ public class CustomersView extends Composite<Div> {
     @Override
     protected void onAttach(AttachEvent attachEvent) {
         super.onAttach(attachEvent);
-        System.out.println("onAttach");
+        LOG.info("onAttach");
         //
         if (getContent().getChildren().count() > 0){
             getContent().removeAll();
@@ -59,36 +53,12 @@ public class CustomersView extends Composite<Div> {
 
         Crud crud = new Crud(configurator);
         getContent().add(crud);
-        subscribeToSocket();
     }
 
     @Override
     protected void onDetach(DetachEvent detachEvent) {
-        unsubscribeToSocket();
         super.onDetach(detachEvent);
-    }
-
-    private void unsubscribeToSocket() {
-        Object obj = UI.getCurrent().getSession().getAttribute("web_socket");
-        if (Objects.isNull(obj)) return;
-        ((WebSocketRepository) obj).getSocket().unsubscribe("/topic/event");
-        LOG.info("unsubscribeToSocket");
-    }
-
-    private void subscribeToSocket() {
-        Object obj = UI.getCurrent().getSession().getAttribute("web_socket");
-        if (Objects.isNull(obj)) return;
-        ((WebSocketRepository) obj).getSocket().subscribe("/topic/event", Message.class, (msg) -> {
-            if (msg != null){
-                //Update In UI-Thread:
-                if (getUI().isPresent()) {
-                    getUI().get().access(() -> {
-                        Notification.show(msg.getPayload());
-                    });
-                }
-            }
-        });
-        LOG.info("subscribeToSocket");
+        LOG.info("onDetach");
     }
 
     private GridDataSource createDataSource(ExecutorType executorType){

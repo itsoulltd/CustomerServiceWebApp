@@ -45,12 +45,13 @@ public class MessageProducer extends com.infoworks.lab.simulator.Runtime {
         CountDownLatch latch = new CountDownLatch(1);
         Flux<Integer> flux = Flux.just(1);
         //
-        long emitInterval = waitRatio * (new Random().nextInt(9) + 1);
+        final int randVal = new Random().nextInt(9) + 1;
+        long emitInterval = waitRatio * randVal;
         flux.delayElements(Duration.ofMillis(emitInterval))
                 .doOnComplete(latch::countDown)
                 .subscribe(intVal -> {
                     Message message = new Message();
-                    message.setPayload("Hello " + intVal);
+                    message.setPayload("Hello " + (intVal + randVal));
                     socket.send("/event", message);
                     System.out.println(message.toString());
                 });
