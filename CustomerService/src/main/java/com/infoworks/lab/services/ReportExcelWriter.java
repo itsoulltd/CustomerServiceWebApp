@@ -26,23 +26,23 @@ public class ReportExcelWriter {
         this.notifyService = notifyService;
     }
 
-    protected void write(Map<Integer, List<String>> rows, String outputFileName) {
+    protected void write(Map<Integer, List<String>> rows, String outputFileName) throws Exception {
         if (!outputFileName.endsWith(".xlsx")) outputFileName += ".xlsx";
         //Excel Writer:
-        try {
-            ExcelWritingService writingService = new ExcelWritingService();
-            String fileName = String.format("target/%s", outputFileName);
-            ContentWriter writer = writingService.createAsyncWriter(100, fileName, true);
-            writer.write("output", rows, true);
-            writer.close();
-        } catch (Exception e) {
-            LOG.error(e.getMessage());
-        }
+        ExcelWritingService writingService = new ExcelWritingService();
+        String fileName = String.format("target/%s", outputFileName);
+        ContentWriter writer = writingService.createAsyncWriter(100, fileName, true);
+        writer.write("output", rows, true);
+        writer.close();
     }
 
     @Async
     public void writeAsync(Map<Integer, List<String>> rows, String outputFileName) {
-        write(rows, outputFileName);
+        try {
+            write(rows, outputFileName);
+        } catch (Exception e) {
+            LOG.error(e.getMessage(), e);
+        }
     }
 
     @Async("SequentialExecutor")
@@ -58,14 +58,18 @@ public class ReportExcelWriter {
             rows.put(counter.getAndIncrement(), values);
         });
         if (rows.size() > 0){
-            outputFileName = System.currentTimeMillis() + "_" + outputFileName;
-            write(rows, outputFileName);
-            //Send Email with Download Link:
-            notifyService.sendEmail("noreply@customer.com"
-                    , email
-                    , "Customer List Report!"
-                    , "welcome-email-sample.html"
-                    , new Property("name", outputFileName));
+            try {
+                outputFileName = System.currentTimeMillis() + "_" + outputFileName;
+                write(rows, outputFileName);
+                //Send Email with Download Link:
+                notifyService.sendEmail("noreply@customer.com"
+                        , email
+                        , "Customer List Report!"
+                        , "welcome-email-sample.html"
+                        , new Property("name", outputFileName));
+            } catch (Exception e) {
+                LOG.error(e.getMessage(), e);
+            }
         }
     }
 
