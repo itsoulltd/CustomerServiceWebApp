@@ -6,6 +6,7 @@ import com.infoworks.lab.services.excel.ExcelWritingService;
 import com.it.soul.lab.sql.query.models.Property;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -21,16 +22,19 @@ public class ReportExcelWriter {
 
     private static Logger LOG = LoggerFactory.getLogger(ReportExcelWriter.class.getSimpleName());
     private NotifyService notifyService;
+    private String downloadDir;
 
-    public ReportExcelWriter(NotifyService notifyService) {
+    public ReportExcelWriter(NotifyService notifyService
+            , @Value("${app.upload.dir}") String downloadDir) {
         this.notifyService = notifyService;
+        this.downloadDir = downloadDir;
     }
 
     protected void write(Map<Integer, List<String>> rows, String outputFileName) throws Exception {
         if (!outputFileName.endsWith(".xlsx")) outputFileName += ".xlsx";
         //Excel Writer:
         ExcelWritingService writingService = new ExcelWritingService();
-        String fileName = String.format("target/%s", outputFileName);
+        String fileName = String.format("%s/%s", downloadDir, outputFileName);
         ContentWriter writer = writingService.createAsyncWriter(100, fileName, true);
         writer.write("output", rows, true);
         writer.close();
