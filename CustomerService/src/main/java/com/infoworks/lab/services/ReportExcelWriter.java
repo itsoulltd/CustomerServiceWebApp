@@ -61,16 +61,25 @@ public class ReportExcelWriter {
                     .collect(Collectors.toList());
             rows.put(counter.getAndIncrement(), values);
         });
+        //Testing...make a long pause:
+        try {
+            Thread.sleep(50000);
+        } catch (InterruptedException e) {
+            LOG.error(e.getMessage(), e);
+        }
+        //
         if (rows.size() > 0){
             try {
                 outputFileName = System.currentTimeMillis() + "_" + outputFileName;
                 write(rows, outputFileName);
+                LOG.info(outputFileName + " generated.");
                 //Send Email with Download Link:
                 notifyService.sendEmail("noreply@customer.com"
                         , email
                         , "Customer List Report!"
                         , "welcome-email-sample.html"
                         , new Property("name", outputFileName));
+                LOG.info("Email Dispatched.");
             } catch (Exception e) {
                 LOG.error(e.getMessage(), e);
             }
