@@ -14,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 public class NotifyService {
@@ -28,6 +29,7 @@ public class NotifyService {
             , String to
             , String subject
             , String template
+            , Map<String, String> attachments
             , Property...properties) {
         //
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -36,6 +38,7 @@ public class NotifyService {
         body.put("to", to);
         body.put("subject", subject);
         body.put("template", template);
+        body.put("attachments", Objects.nonNull(attachments) ? attachments : new HashMap<>());
         if (properties.length > 0){
             Row row = new Row();
             row.setProperties(Arrays.asList(properties));

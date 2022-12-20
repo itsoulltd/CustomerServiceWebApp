@@ -11,10 +11,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -32,14 +29,22 @@ public class ReportExcelWriter {
         this.downloadDir = downloadDir;
     }
 
-    protected void write(Map<Integer, List<String>> rows, String outputFileName) throws Exception {
+    /**
+     * Return the file saved path to caller
+     * @param rows
+     * @param outputFileName
+     * @return file saved path
+     * @throws Exception
+     */
+    protected String write(Map<Integer, List<String>> rows, String outputFileName) throws Exception {
         if (!outputFileName.endsWith(".xlsx")) outputFileName += ".xlsx";
         //Excel Writer:
         ExcelWritingService writingService = new ExcelWritingService();
-        String fileName = String.format("%s/%s", downloadDir, outputFileName);
-        ContentWriter writer = writingService.createAsyncWriter(100, fileName, true);
+        String saveFileAt = String.format("%s/%s", downloadDir, outputFileName);
+        ContentWriter writer = writingService.createAsyncWriter(100, saveFileAt, true);
         writer.write("output", rows, true);
         writer.close();
+        return saveFileAt;
     }
 
     @Async
@@ -75,13 +80,16 @@ public class ReportExcelWriter {
         if (rows.size() > 0){
             try {
                 outputFileName = System.currentTimeMillis() + "_" + outputFileName;
-                write(rows, outputFileName);
+                String savedAt = write(rows, outputFileName);
                 LOG.info(outputFileName + " generated.");
                 //Send Email with Download Link:
+                Map<String, String> attachments = new HashMap<>();
+                attachments.put(outputFileName, savedAt);
                 notifyService.sendEmail("noreply@customer.com"
                         , email
                         , "Customer List Report!"
                         , "welcome-email-sample.html"
+                        , attachments
                         , new Property("name", outputFileName));
                 LOG.info("Email Dispatched.");
             } catch (Exception e) {

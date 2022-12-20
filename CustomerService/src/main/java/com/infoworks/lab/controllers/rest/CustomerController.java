@@ -56,6 +56,7 @@ public class CustomerController implements RestRepository<Customer, Integer> {
                 , customer.getEmail()
                 , "Customer Created!"
                 , "welcome-email-sample.html"
+                , null
                 , new Property("name", customer.getName())
                 , new Property("technologies", new String[]{"Vaadin", "Spring-5", "Spring-Boot"}));
         return customer;
