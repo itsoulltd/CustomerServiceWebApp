@@ -7,28 +7,21 @@ import java.util.Map;
 
 public class Email extends Message {
 
-    private Map<String, Object> properties;
     @EmailPattern
     private String to;
     @EmailPattern
     private String from;
     private String subject;
     private String template;
+    private Map<String, Object> properties;
+    private Map<String, String> attachments;
 
-    public Map<String, Object> getProperties() {
-        return properties;
-    }
-
-    public void setProperties(Map<String, Object> properties) {
-        this.properties = properties;
+    public String getTo() {
+        return to;
     }
 
     public String getFrom() {
         return from;
-    }
-
-    public String getTo() {
-        return to;
     }
 
     public String getSubject() {
@@ -53,5 +46,25 @@ public class Email extends Message {
 
     public void setTemplate(String template) {
         this.template = template;
+    }
+
+    public Map<String, Object> getProperties() {
+        return properties;
+    }
+
+    public void setProperties(Map<String, Object> properties) {
+        this.properties = properties;
+    }
+
+    /**
+     * Map<String, String> == Map<FileName, FilePath>
+     * @return
+     */
+    public Map<String, String> getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(Map<String, String> attachments) {
+        this.attachments = attachments;
     }
 }

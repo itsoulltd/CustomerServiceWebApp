@@ -5,9 +5,17 @@ import com.infoworks.lab.domain.models.Otp;
 import com.infoworks.lab.rest.models.Response;
 import com.infoworks.lab.services.definition.iEmailSender;
 import com.infoworks.lab.services.definition.iOtpService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
 @RequestMapping("/v1")
@@ -15,11 +23,19 @@ public class NotificationController {
 
     private iEmailSender emailSender;
     private iOtpService otpService;
+    private int attachmentFileSizeInMb = 2;
+    private int attachmentTotalSizeInMb = 10;
 
     public NotificationController(iEmailSender emailSender
-            , iOtpService otpService) {
+            , iOtpService otpService
+            , @Value("${app.mail.attachment.individual.file.size}") String fileSize
+            , @Value("${app.mail.attachment.total.file.size}") String totalFileSize) {
         this.emailSender = emailSender;
         this.otpService = otpService;
+        try {
+            this.attachmentFileSizeInMb = Integer.parseInt(fileSize.toLowerCase().replace("mb", ""));
+            this.attachmentTotalSizeInMb = Integer.parseInt(totalFileSize.toLowerCase().replace("mb", ""));
+        } catch (Exception e) {}
     }
 
     @PostMapping("/push")
@@ -62,7 +78,8 @@ public class NotificationController {
     @PostMapping("/mail")
     public ResponseEntity<String> sendEmail(@RequestBody Email email) {
         //
-        int code = emailSender.sendHtmlMessage(email);
+        Email filtered = filterOutLargeAttachments(email);
+        int code = emailSender.sendHtmlMessage(filtered);
         return ResponseEntity.status(code).body((code == 200 ? "Email send successful" : "Email dispatch successful"));
     }
 
@@ -74,8 +91,36 @@ public class NotificationController {
         email.setTemplate("email-otp-msg.html");
         email.getProperties().put("name", username);
         email.getProperties().put("otp", otp.getValue());
-        int code = emailSender.sendHtmlMessage(email);
+        Email filtered = filterOutLargeAttachments(email);
+        int code = emailSender.sendHtmlMessage(filtered);
         return ResponseEntity.status(code).body((code == 200 ? "Email send successful" : "Email dispatch successful"));
+    }
+
+    private Email filterOutLargeAttachments(Email email) {
+        AtomicLong totalByteLength = new AtomicLong(0);
+        long fileMaxSizeInBytes = 1024 * 1024 * attachmentFileSizeInMb;
+        long totalFileMaxSizeInBytes = 1024 * 1024 * attachmentTotalSizeInMb;
+        Map<String, String> filtered = new HashMap<>();
+        email.getAttachments();
+        for (Map.Entry<String, String> entry : email.getAttachments().entrySet()){
+            try {
+                Path resourcePath = Paths.get(entry.getValue());
+                if (Files.exists(resourcePath)){
+                    long fileSize = Files.size(resourcePath); //return size in bytes
+                    if (fileSize <= fileMaxSizeInBytes){
+                        filtered.put(entry.getKey(), entry.getValue());
+                        totalByteLength.set(fileSize);
+                    }
+                }
+                if (totalByteLength.get() <= totalFileMaxSizeInBytes)
+                    break;
+            } catch (Exception e) {
+                //LOG.error(e.getMessage(), e);
+            }
+        }
+        //Update Email with FilteredList:
+        email.setAttachments(filtered);
+        return email;
     }
 
 }
