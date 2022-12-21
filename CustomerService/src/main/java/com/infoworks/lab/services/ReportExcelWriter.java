@@ -22,11 +22,14 @@ public class ReportExcelWriter {
     private static Logger LOG = LoggerFactory.getLogger(ReportExcelWriter.class.getSimpleName());
     private NotifyService notifyService;
     private String downloadDir;
+    private boolean delayInWriteAndEmail = false;
 
     public ReportExcelWriter(NotifyService notifyService
-            , @Value("${app.upload.dir}") String downloadDir) {
+            , @Value("${app.upload.dir}") String downloadDir
+            , @Value("${app.async.add.delay.writeAndEmail}") boolean delayInWriteAndEmail) {
         this.notifyService = notifyService;
         this.downloadDir = downloadDir;
+        this.delayInWriteAndEmail = delayInWriteAndEmail;
     }
 
     /**
@@ -68,15 +71,9 @@ public class ReportExcelWriter {
                     .collect(Collectors.toList());
             rows.put(counter.getAndIncrement(), values);
         });
-        //Testing...make a long pause:
-        try {
-            final int randVal = new Random().nextInt(9) + 1;
-            long emitInterval = 500 * randVal;
-            Thread.sleep(Duration.ofMillis(emitInterval).toMillis());
-        } catch (InterruptedException e) {
-            LOG.error(e.getMessage(), e);
+        if (delayInWriteAndEmail){
+            makeDelayInThread();
         }
-        //
         if (rows.size() > 0){
             try {
                 outputFileName = System.currentTimeMillis() + "_" + outputFileName;
@@ -95,6 +92,17 @@ public class ReportExcelWriter {
             } catch (Exception e) {
                 LOG.error(e.getMessage(), e);
             }
+        }
+    }
+
+    private void makeDelayInThread() {
+        //Testing...make a long pause:
+        try {
+            final int randVal = new Random().nextInt(9) + 1;
+            long emitInterval = 500 * randVal;
+            Thread.sleep(Duration.ofMillis(emitInterval).toMillis());
+        } catch (InterruptedException e) {
+            LOG.error(e.getMessage(), e);
         }
     }
 
