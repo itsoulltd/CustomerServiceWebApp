@@ -50,6 +50,13 @@ public class ReportExcelWriter {
         return saveFileAt;
     }
 
+    /**
+     * @Async has three limitations:
+     * * It must be applied to public methods only.
+     * * It must return either void or Future<T> as methods returnType.
+     * * Self-invocation — calling the async method from within the same class — won't work.
+     */
+
     @Async
     public void writeAsync(Map<Integer, List<String>> rows, String outputFileName) {
         try {
@@ -72,7 +79,7 @@ public class ReportExcelWriter {
             rows.put(counter.getAndIncrement(), values);
         });
         if (delayInWriteAndEmail){
-            makeDelayInThread();
+            makeDelayInThread(500);
         }
         if (rows.size() > 0){
             try {
@@ -95,11 +102,11 @@ public class ReportExcelWriter {
         }
     }
 
-    private void makeDelayInThread() {
+    private void makeDelayInThread(int wait) {
         //Testing...make a long pause:
         try {
             final int randVal = new Random().nextInt(9) + 1;
-            long emitInterval = 500 * randVal;
+            long emitInterval = wait * randVal;
             Thread.sleep(Duration.ofMillis(emitInterval).toMillis());
         } catch (InterruptedException e) {
             LOG.error(e.getMessage(), e);
