@@ -1,8 +1,8 @@
 package com.infoworks.lab.services;
 
 import com.infoworks.lab.definition.ContentWriter;
-import com.infoworks.lab.domain.entities.Customer;
 import com.infoworks.lab.services.excel.ExcelWritingService;
+import com.it.soul.lab.sql.entity.Entity;
 import com.it.soul.lab.sql.query.models.Property;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,10 +11,12 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class ReportExcelWriter {
@@ -67,11 +69,11 @@ public class ReportExcelWriter {
     }
 
     @Async("SequentialExecutor")
-    public void writeAndEmail(Customer[] customers, String outputFileName, String email) {
+    public void writeAndEmail(List<? extends Entity> entities, String outputFileName, String email) {
         Map<Integer, List<String>> rows = new HashMap<>();
         AtomicInteger counter = new AtomicInteger(0);
-        Stream.of(customers).forEach(customer -> {
-            List<String> values = customer.getRow().getCloneProperties()
+        entities.forEach(entity -> {
+            List<String> values = entity.getRow().getCloneProperties()
                     .stream()
                     .filter(property -> property.getValue() != null)
                     .map(property -> property.getValue().toString())
@@ -89,9 +91,9 @@ public class ReportExcelWriter {
                 //Send Email with Download Link:
                 Map<String, String> attachments = new HashMap<>();
                 attachments.put(outputFileName, savedAt);
-                notifyService.sendEmail("noreply@customer.com"
+                notifyService.sendEmail("noreply@entity.com"
                         , email
-                        , "Customer List Report!"
+                        , "Entity List Report!"
                         , "welcome-email-sample.html"
                         , attachments
                         , new Property("name", outputFileName));

@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Arrays;
+
 @RestController
 @RequestMapping("/v1/reporting")
 public class ReportingController {
@@ -33,7 +35,7 @@ public class ReportingController {
         //
         Customer[] customers = dataSource.readSync(0, dataSource.size());
         //Write to Excel and then email:
-        excelWriter.writeAndEmail(customers, "customer_list.xlsx", email);
+        excelWriter.writeAndEmail(Arrays.asList(customers), "customer_list.xlsx", email);
         return ResponseEntity.ok(new Response().setStatus(200)
                 .setMessage("Please Check Your Email For Download Link."));
     }
