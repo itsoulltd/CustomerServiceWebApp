@@ -26,7 +26,7 @@ public class ReportExcelWriter {
 
     public ReportExcelWriter(NotifyService notifyService
             , @Value("${app.upload.dir}") String downloadDir
-            , @Value("${app.async.add.delay.writeAndEmail}") boolean delayInWriteAndEmail) {
+            , @Value("${test.async.add.delay.writeAndEmail}") boolean delayInWriteAndEmail) {
         this.notifyService = notifyService;
         this.downloadDir = downloadDir;
         this.delayInWriteAndEmail = delayInWriteAndEmail;
