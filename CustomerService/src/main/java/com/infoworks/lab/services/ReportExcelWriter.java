@@ -76,8 +76,8 @@ public class ReportExcelWriter {
         entities.forEach(entity -> {
             List<String> values = entity.getRow().getCloneProperties()
                     .stream()
-                    //.filter(property -> property.getValue() != null)
-                    .map(property -> Objects.isNull(property.getValue()) ? "" : property.getValue().toString())
+                    .map(property -> Objects.isNull(property.getValue())
+                            ? "" : property.getValue().toString())
                     .collect(Collectors.toList());
             rows.put(counter.getAndIncrement(), values);
         });
