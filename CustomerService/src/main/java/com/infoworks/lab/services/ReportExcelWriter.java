@@ -23,14 +23,14 @@ public class ReportExcelWriter {
 
     private static Logger LOG = LoggerFactory.getLogger(ReportExcelWriter.class.getSimpleName());
     private NotifyService notifyService;
-    private String downloadDir;
-    private boolean delayInWriteAndEmail = false;
+    private String uploadDir;
+    private boolean delayInWriteAndEmail;
 
     public ReportExcelWriter(NotifyService notifyService
-            , @Value("${app.upload.dir}") String downloadDir
+            , @Value("${app.upload.dir}") String uploadDir
             , @Value("${test.async.add.delay.writeAndEmail}") boolean delayInWriteAndEmail) {
         this.notifyService = notifyService;
-        this.downloadDir = downloadDir;
+        this.uploadDir = uploadDir;
         this.delayInWriteAndEmail = delayInWriteAndEmail;
     }
 
@@ -45,7 +45,7 @@ public class ReportExcelWriter {
         if (!outputFileName.endsWith(".xlsx")) outputFileName += ".xlsx";
         //Excel Writer:
         ExcelWritingService writingService = new ExcelWritingService();
-        String saveFileAt = String.format("%s/%s", downloadDir, outputFileName);
+        String saveFileAt = String.format("%s/%s", uploadDir, outputFileName);
         ContentWriter writer = writingService.createAsyncWriter(100, saveFileAt, true);
         writer.write("output", rows, true);
         writer.close();
@@ -69,7 +69,11 @@ public class ReportExcelWriter {
     }
 
     @Async("SequentialExecutor")
-    public void writeAndEmail(List<? extends Entity> entities, String outputFileName, String email) {
+    public void writeAsyncAndEmail(List<? extends Entity> entities
+            , String outputFileName
+            , String from, String to
+            , String subject
+            , String template, Property...properties) {
         Map<Integer, List<String>> rows = new HashMap<>();
         AtomicInteger counter = new AtomicInteger(0);
         entities.forEach(entity -> {
@@ -91,13 +95,12 @@ public class ReportExcelWriter {
                 //Send Email with Download Link:
                 Map<String, String> attachments = new HashMap<>();
                 attachments.put(outputFileName, savedAt);
-                notifyService.sendEmail("noreply@entity.com"
-                        , email
-                        , "Entity List Report!"
-                        , "welcome-email-sample.html"
-                        , attachments
-                        , new Property("name", outputFileName));
-                LOG.info("Email Dispatched.");
+                notifyService.sendEmail(from, to
+                        , subject, template
+                        , attachments, properties);
+                LOG.info("Email Dispatched to:{} using template:{}, attachment:{}, properties:{}"
+                        , to, template
+                        , attachments.size(), properties.length);
             } catch (Exception e) {
                 LOG.error(e.getMessage(), e);
             }
