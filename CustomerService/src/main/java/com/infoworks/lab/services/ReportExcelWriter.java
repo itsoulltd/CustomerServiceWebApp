@@ -91,7 +91,7 @@ public class ReportExcelWriter {
             try {
                 outputFileName = System.currentTimeMillis() + "_" + outputFileName;
                 String savedAt = write(rows, outputFileName);
-                LOG.info(outputFileName + " generated.");
+                LOG.info("{} saved location {}", outputFileName, savedAt);
                 //Send Email with Download Link:
                 Map<String, String> attachments = new HashMap<>();
                 attachments.put(outputFileName, savedAt);
