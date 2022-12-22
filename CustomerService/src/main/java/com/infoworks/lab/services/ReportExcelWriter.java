@@ -73,6 +73,11 @@ public class ReportExcelWriter {
             , String template, Property...properties) {
         Map<Integer, List<String>> rows = new HashMap<>();
         AtomicInteger counter = new AtomicInteger(0);
+        //Set Headers:
+        if (!entities.isEmpty()) {
+            rows.put(counter.getAndIncrement()
+                    , Arrays.asList(entities.get(0).getRow().getKeys()));
+        }
         entities.forEach(entity -> {
             List<String> values = entity.getRow().getCloneProperties()
                     .stream()
