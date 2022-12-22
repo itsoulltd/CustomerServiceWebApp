@@ -11,10 +11,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -79,8 +76,8 @@ public class ReportExcelWriter {
         entities.forEach(entity -> {
             List<String> values = entity.getRow().getCloneProperties()
                     .stream()
-                    .filter(property -> property.getValue() != null)
-                    .map(property -> property.getValue().toString())
+                    //.filter(property -> property.getValue() != null)
+                    .map(property -> Objects.isNull(property.getValue()) ? "" : property.getValue().toString())
                     .collect(Collectors.toList());
             rows.put(counter.getAndIncrement(), values);
         });
