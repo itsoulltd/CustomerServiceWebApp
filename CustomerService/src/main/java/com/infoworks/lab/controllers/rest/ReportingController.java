@@ -5,6 +5,7 @@ import com.infoworks.lab.rest.models.Response;
 import com.infoworks.lab.services.NotifyService;
 import com.infoworks.lab.services.ReportExcelWriter;
 import com.it.soul.lab.data.base.DataSource;
+import com.it.soul.lab.sql.entity.Entity;
 import com.it.soul.lab.sql.query.models.Property;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 @RestController
 @RequestMapping("/v1/reporting")
@@ -36,11 +39,12 @@ public class ReportingController {
         //
         Customer[] customers = dataSource.readSync(0, dataSource.size());
         //Write to Excel and then email:
-        excelWriter.writeAsyncAndEmail(Arrays.asList(customers), "customer_list.xlsx"
+        excelWriter.writeAsyncAndEmail(Arrays.asList(customers)
+                , "customer_list.xlsx"
                 , "noreply@customer.com", to
                 , "CustomerList Report!"
                 , "welcome-email-sample.html"
-                , new Property("name", "Mr/Mrs Mohamed Lee"));
+                , new Property("name", "Mr/Mrs. Mohamed Lee"));
         return ResponseEntity.ok(new Response().setStatus(200)
                 .setMessage("Please Check Your Email For Download Link."));
     }

@@ -2,11 +2,9 @@ package com.infoworks.lab.domain.entities;
 
 import com.infoworks.lab.domain.validation.constraint.Gender.IsValidGender;
 import com.infoworks.lab.rest.validation.Email.EmailPattern;
-import com.it.soul.lab.sql.SQLExecutor;
 import com.it.soul.lab.sql.entity.Ignore;
 import com.it.soul.lab.sql.entity.PrimaryKey;
 import com.it.soul.lab.sql.entity.TableName;
-import com.it.soul.lab.sql.query.models.Property;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -132,10 +130,6 @@ public class Customer extends com.it.soul.lab.sql.entity.Entity {
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
-	}
-
-	public Property getPropertyTest(String key, SQLExecutor exe, boolean skipPrimary) {
-		return getProperty(key, exe, skipPrimary);
 	}
 
 }
