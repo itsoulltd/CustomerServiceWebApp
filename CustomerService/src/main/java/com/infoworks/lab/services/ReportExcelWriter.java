@@ -49,6 +49,29 @@ public class ReportExcelWriter {
         return saveFileAt;
     }
 
+    public String write(List<? extends Entity> entities, String outputFileName) throws Exception {
+        Map<Integer, List<String>> rows = new HashMap<>();
+        AtomicInteger counter = new AtomicInteger(0);
+        //Set Headers:
+        if (!entities.isEmpty()) {
+            rows.put(counter.getAndIncrement()
+                    , Arrays.asList(entities.get(0).getRow().getKeys()));
+        }
+        entities.forEach(entity -> {
+            List<String> values = entity.getRow().getCloneProperties()
+                    .stream()
+                    .map(property -> Objects.isNull(property.getValue())
+                            ? "" : property.getValue().toString())
+                    .collect(Collectors.toList());
+            rows.put(counter.getAndIncrement(), values);
+        });
+        //Write to file:
+        outputFileName = System.currentTimeMillis() + "_" + outputFileName;
+        String savedAt = write(rows, outputFileName);
+        LOG.info("{} saved location {}", outputFileName, savedAt);
+        return savedAt;
+    }
+
     /**
      * @Async has three limitations:
      * * It must be applied to public methods only.
@@ -65,47 +88,42 @@ public class ReportExcelWriter {
         }
     }
 
+    @Async
+    public void sendEmail(String from, String to
+            , String subject
+            , String template
+            , Map<String, String> attachments, Property...properties) {
+        //
+        if (delayInWriteAndEmail){
+            makeDelayInThread(300);
+        }
+        notifyService.sendEmail(from, to
+                , subject, template
+                , attachments, properties);
+        LOG.info("Email Dispatched to:{} using template:{}, attachment:{}, properties:{}"
+                , to, template
+                , attachments.size(), properties.length);
+    }
+
     @Async("SequentialExecutor")
     public void writeAsyncAndEmail(List<? extends Entity> entities
             , String outputFileName
             , String from, String to
             , String subject
             , String template, Property...properties) {
-        Map<Integer, List<String>> rows = new HashMap<>();
-        AtomicInteger counter = new AtomicInteger(0);
-        //Set Headers:
-        if (!entities.isEmpty()) {
-            rows.put(counter.getAndIncrement()
-                    , Arrays.asList(entities.get(0).getRow().getKeys()));
-        }
-        entities.forEach(entity -> {
-            List<String> values = entity.getRow().getCloneProperties()
-                    .stream()
-                    .map(property -> Objects.isNull(property.getValue())
-                            ? "" : property.getValue().toString())
-                    .collect(Collectors.toList());
-            rows.put(counter.getAndIncrement(), values);
-        });
+        //
         if (delayInWriteAndEmail){
-            makeDelayInThread(500);
+            makeDelayInThread(200);
         }
-        if (rows.size() > 0){
-            try {
-                outputFileName = System.currentTimeMillis() + "_" + outputFileName;
-                String savedAt = write(rows, outputFileName);
-                LOG.info("{} saved location {}", outputFileName, savedAt);
-                //Send Email with Download Link:
-                Map<String, String> attachments = new HashMap<>();
-                attachments.put(outputFileName, savedAt);
-                notifyService.sendEmail(from, to
-                        , subject, template
-                        , attachments, properties);
-                LOG.info("Email Dispatched to:{} using template:{}, attachment:{}, properties:{}"
-                        , to, template
-                        , attachments.size(), properties.length);
-            } catch (Exception e) {
-                LOG.error(e.getMessage(), e);
-            }
+        try {
+            String savedAt = write(entities, outputFileName);
+            //Send Email with Download Link:
+            Map<String, String> attachments = new HashMap<>();
+            attachments.put(outputFileName, savedAt);
+            //** Self-invocation — calling the async method from within the same class — won't work.
+            sendEmail(from, to, subject, template, attachments, properties);
+        } catch (Exception e) {
+            LOG.error(e.getMessage(), e);
         }
     }
 
