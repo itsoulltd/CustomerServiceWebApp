@@ -66,7 +66,7 @@ public class ReportExcelWriter {
             rows.put(counter.getAndIncrement(), values);
         });
         //Write to file:
-        outputFileName = System.currentTimeMillis() + "_" + outputFileName;
+        //outputFileName = System.currentTimeMillis() + "_" + outputFileName;
         String savedAt = write(rows, outputFileName);
         LOG.info("{} saved location {}", outputFileName, savedAt);
         return savedAt;
