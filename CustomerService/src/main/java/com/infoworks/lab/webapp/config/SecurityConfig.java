@@ -11,7 +11,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled=true)
@@ -45,9 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //.requiresChannel().anyRequest().requiresSecure() //enable for Https
                 //.and()
                 //.authorizeRequests().anyRequest().authenticated() //enable to restrict all
-                .authorizeRequests().antMatchers("/**").permitAll() //enable to open all
-                .and()
-                .addFilterBefore(new AuthorizationFilter(), BasicAuthenticationFilter.class);
+                .authorizeRequests().antMatchers("/**").permitAll(); //enable to open all
         //Disable for H2 DB:
         if (activeDriverClass.equalsIgnoreCase(DriverClass.H2_EMBEDDED.toString())){
             http.headers().frameOptions().disable();
